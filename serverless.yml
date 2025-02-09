@@ -1,0 +1,48 @@
+service: pdf-translator-api
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  memorySize: 1024
+  timeout: 30
+  environment:
+    GOOGLE_CLOUD_API_KEY: ${env:GOOGLE_CLOUD_API_KEY}
+    STAGE: ${opt:stage, 'dev'}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+custom:
+  bucket: pdf-translator-${opt:stage, 'dev'}
+
+functions:
+  api:
+    handler: lambda_handler.handler
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
+    environment:
+      UPLOAD_BUCKET: ${self:custom.bucket}
+
+resources:
+  Resources:
+    UploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucket}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+              MaxAge: 3000

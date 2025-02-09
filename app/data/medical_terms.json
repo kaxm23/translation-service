@@ -1,0 +1,12 @@
+{
+    "myocardial infarction": {
+        "fr": "infarctus du myocarde",
+        "es": "infarto de miocardio",
+        "de": "Myokardinfarkt"
+    },
+    "hypertension": {
+        "fr": "hypertension",
+        "es": "hipertensión",
+        "de": "Bluthochdruck"
+    }
+}

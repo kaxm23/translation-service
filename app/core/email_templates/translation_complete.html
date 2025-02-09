@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Translation Complete</title>
+    <style>
+        .translation-details {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .confidence-score {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .text-block {
+            background-color: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .metadata {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Translation Complete</h1>
+    <p>Your translation request has been completed.</p>
+    
+    <div class="translation-details">
+        <h2>Translation Details</h2>
+        <p>Translation ID: {{ translation_id }}</p>
+        <p>Languages: {{ source_lang }} → {{ target_lang }}</p>
+        <p>Confidence Score: <span class="confidence-score">{{ confidence_score }}</span></p>
+        <p>Completed: {{ completion_time }}</p>
+        
+        <h3>Source Text:</h3>
+        <div class="text-block">
+            {{ source_text }}
+        </div>
+        
+        <h3>Translated Text:</h3>
+        <div class="text-block">
+            {{ translated_text }}
+        </div>
+    </div>
+    
+    <div class="metadata">
+        <p>Translation processed on {{ timestamp }} by {{ processed_by }}</p>
+    </div>
+    
+    <div class="footer">
+        <p>
+            You can view the full translation in your dashboard.
+            If you have any questions, please contact our support team.
+        </p>
+    </div>
+</body>
+</html>

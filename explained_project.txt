@@ -1,0 +1,288 @@
+# Translation Service Project Documentation
+Created by: kaxm23
+Created on: 2025-02-09 10:09:52 UTC
+
+=================================================================
+                    PROJECT STRUCTURE
+=================================================================
+
+translation_service/
+├── README.md                   # Project documentation
+├── requirements.txt           # Python dependencies
+├── explained_project.txt      # This comprehensive guide
+├── alembic/                  # Database migrations
+│   ├── versions/            # Migration versions
+│   │   └── initial_migration.py
+│   ├── env.py              # Alembic environment config
+│   └── alembic.ini         # Alembic configuration
+├── app/
+│   ├── __init__.py
+│   ├── main.py             # FastAPI application entry point
+│   ├── config.py           # Application configuration
+│   ├── api/                # API endpoints
+│   │   ├── __init__.py
+│   │   ├── router.py       # API router configuration
+│   │   ├── translate.py    # Translation endpoints
+│   │   ├── votes.py        # Voting endpoints
+│   │   ├── favorites.py    # Favorites endpoints
+│   │   └── translation_stats.py  # Statistics endpoints
+│   ├── core/               # Core functionality
+│   │   ├── __init__.py
+│   │   ├── security.py     # Authentication & authorization
+│   │   ├── email.py        # Email handling
+│   │   └── constants.py    # Global constants
+│   ├── database/           # Database configuration
+│   │   ├── __init__.py
+│   │   ├── session.py      # Database session management
+│   │   └── base.py         # Base database model
+│   ├── models/             # SQLAlchemy models
+│   │   ├── __init__.py
+│   │   ├── user_auth.py    # User authentication model
+│   │   ├── translation_history.py  # Translation history
+│   │   ├── translation_vote.py     # Voting model
+│   │   ├── translation_rating.py   # Rating model
+│   │   ├── favorite_translation.py # Favorites model
+│   │   └── translation_stats.py    # Statistics model
+│   ├── schemas/            # Pydantic schemas
+│   │   ├── __init__.py
+│   │   ├── user.py         # User schemas
+│   │   ├── translation.py  # Translation schemas
+│   │   ├── vote.py         # Vote schemas
+│   │   └── favorite.py     # Favorite schemas
+│   ├── services/           # Business logic
+│   │   ├── __init__.py
+│   │   ├── translation.py          # Translation service
+│   │   ├── adaptive_translator.py  # AI translation
+│   │   ├── translation_analyzer.py # Analysis service
+│   │   └── translation_correction.py # Correction service
+│   ├── templates/          # Email templates
+│   │   ├── email/
+│   │   │   ├── welcome.html
+│   │   │   ├── reset_password.html
+│   │   │   └── translation_complete.html
+│   │   └── base.html
+│   └── utils/              # Utility functions
+│       ├── __init__.py
+│       ├── email.py        # Email utilities
+│       └── validators.py   # Input validators
+├── tests/                  # Test suite
+│   ├── __init__.py
+│   ├── conftest.py        # Test configuration
+│   ├── test_translation.py
+│   ├── test_votes.py
+│   └── test_favorites.py
+└── docker/                 # Docker configuration
+    ├── Dockerfile
+    ├── docker-compose.yml
+    └── nginx/
+        └── nginx.conf
+
+=================================================================
+                    CHEATSHEET
+=================================================================
+
+1. API ENDPOINTS
+---------------
+
+Translation:
+POST /api/v1/translate
+{
+    "text": "Hello world",
+    "source_lang": "en",
+    "target_lang": "es",
+    "notify_email": true
+}
+
+GET /api/v1/translations/{translation_id}
+GET /api/v1/translations/history
+
+Voting:
+POST /api/v1/translations/{translation_id}/vote
+{
+    "vote_type": "upvote"  # or "downvote"
+}
+
+DELETE /api/v1/translations/{translation_id}/vote
+GET /api/v1/translations/{translation_id}/votes
+GET /api/v1/translations/votes/top
+
+2. DATABASE MODELS
+-----------------
+
+TranslationHistory:
+- id: int (PK)
+- user_id: int (FK)
+- source_text: str
+- translated_text: str
+- source_lang: str
+- target_lang: str
+- confidence_score: float
+- upvotes: int
+- downvotes: int
+- created_at: datetime
+
+TranslationVote:
+- id: int (PK)
+- translation_id: int (FK)
+- user_id: int (FK)
+- vote_type: VoteType
+- created_at: datetime
+
+3. ENVIRONMENT VARIABLES
+-----------------------
+
+API_V1_STR=/api/v1
+PROJECT_NAME=Translation Service
+POSTGRES_SERVER=localhost
+POSTGRES_USER=user
+POSTGRES_PASSWORD=password
+POSTGRES_DB=translation_db
+SECRET_KEY=your-secret-key
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+MAIL_USERNAME=your@email.com
+MAIL_PASSWORD=password
+OPENAI_API_KEY=your-api-key
+
+4. DOCKER COMMANDS
+-----------------
+
+# Build and start
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f api
+
+# Rebuild
+docker-compose up -d --build api
+
+5. DATABASE MIGRATIONS
+--------------------
+
+# Create
+alembic revision --autogenerate -m "description"
+
+# Apply
+alembic upgrade head
+
+# Rollback
+alembic downgrade -1
+
+6. TESTING
+----------
+
+# All tests
+pytest
+
+# Specific test
+pytest tests/test_translation.py
+
+# Coverage
+pytest --cov=app tests/
+
+7. ERROR CODES
+-------------
+
+200: Success
+201: Created
+400: Bad Request
+401: Unauthorized
+403: Forbidden
+404: Not Found
+409: Conflict
+422: Validation Error
+500: Internal Server Error
+
+8. COMMON HEADERS
+---------------
+
+Authorization: Bearer <token>
+Content-Type: application/json
+Accept: application/json
+
+9. RESPONSE FORMATS
+-----------------
+
+Success:
+{
+    "status": "success",
+    "data": {},
+    "timestamp": "2025-02-09 10:09:52",
+    "processed_by": "kaxm23"
+}
+
+Error:
+{
+    "status": "error",
+    "detail": "Error message",
+    "timestamp": "2025-02-09 10:09:52",
+    "processed_by": "kaxm23"
+}
+
+10. CACHING
+----------
+
+Redis Keys:
+- translation:{translation_id}
+- user:{user_id}:favorites
+- translation:{translation_id}:votes
+
+Cache TTL: 3600 (1 hour)
+
+11. MONITORING
+------------
+
+Health Check: GET /api/v1/health
+Stats: GET /api/v1/stats
+Metrics: GET /api/v1/metrics
+
+12. SECURITY
+-----------
+
+- JWT Authentication
+- Rate Limiting
+- Input Validation
+- SQL Injection Protection
+- XSS Prevention
+- CORS Configuration
+
+13. USEFUL COMMANDS
+-----------------
+
+# Start server
+uvicorn app.main:app --reload
+
+# Format code
+black app/
+
+# Check types
+mypy app/
+
+=================================================================
+                    MAINTENANCE
+=================================================================
+
+Support Email: support@translation-service.com
+API Version: v1
+Last Updated: 2025-02-09 10:09:52
+Maintainer: kaxm23
+
+=================================================================
+                    NOTES
+=================================================================
+
+1. Always check the API documentation at /docs or /redoc
+2. Use environment variables for sensitive data
+3. Run tests before deploying
+4. Monitor Redis cache usage
+5. Keep dependencies updated
+6. Regular database backups
+7. Check logs for errors
+8. Monitor API performance
+9. Update documentation
+10. Review security settings
+
+=================================================================
+EOF

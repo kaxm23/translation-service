@@ -1,0 +1,8 @@
+pdf_translator/
+├── requirements.txt
+├── .env
+├── src/
+│   ├── __init__.py
+│   ├── pdf_processor.py
+│   └── translator.py
+└── README.md

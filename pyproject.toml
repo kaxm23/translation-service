@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fastapi-streamlit-project"
+version = "0.1.0"
+description = "FastAPI with Streamlit frontend"
+authors = ["kaxm23"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+streamlit = "^1.20.0"
+fastapi = "^0.68.0"
+uvicorn = {extras = ["standard"], version = "^0.15.0"}
+python-multipart = "^0.0.5"
+requests = "^2.28.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
