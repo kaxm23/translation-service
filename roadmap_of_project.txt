@@ -1,0 +1,110 @@
+🚀 AI-Powered PDF Translator - Cheat Sheet
+A quick reference for all features, APIs, and implementation details in your project.
+
+1️⃣ Core Features
+✅ PDF Upload & Translation → Converts PDFs to Arabic while maintaining formatting.
+✅ AI-Powered Translation → Uses GPT-4 API for context-aware translations.
+✅ Grammar Correction → Fixes errors before translation using Gramformer.
+✅ Alternative Translations → GPT-4 generates multiple translation options.
+✅ Translation Error Detection → AI highlights mistakes using LanguageTool.
+✅ Chat-Style PDF Translation → Detects & translates chat conversations.
+✅ Batch Translation → Allows users to upload multiple PDFs at once.
+
+2️⃣ User Features
+✅ User Authentication (Login/Signup) → Users create accounts & store history.
+✅ Translation History → Users can view and download past translations.
+✅ AI-Learning from User Feedback → AI improves based on user ratings.
+✅ Favorite Translations → Users can save important translations.
+✅ Translation Leaderboard → Tracks most active users.
+✅ Email Notifications → Notifies users when translation is complete.
+
+3️⃣ Tech Stack
+Backend (FastAPI)
+FastAPI → API framework.
+PyMuPDF & pdfplumber → Extract text from PDFs.
+Tesseract OCR → Recognizes scanned text.
+OpenAI GPT-4 → AI-powered translation.
+SQLAlchemy → Stores user data & translation history.
+JWT & OAuth2 → User authentication.
+Frontend (Streamlit)
+Streamlit → Simple web UI for uploading & translating PDFs.
+Axios (React Option) → Sends API requests.
+Database (SQLite/PostgreSQL)
+Stores users, translations, favorites, feedback, and history.
+4️⃣ API Endpoints (FastAPI)
+Translation
+Method	Endpoint	Description
+POST	/translate-gpt4/	Uploads a PDF & translates it using GPT-4.
+POST	/translate-check-errors/	Translates & checks for translation mistakes.
+POST	/translate-multiple/	Provides multiple alternative translations.
+POST	/translate-chat/	Detects & translates chat-style messages.
+User Authentication
+Method	Endpoint	Description
+POST	/signup/	Creates a new user account.
+POST	/login/	Authenticates user & returns JWT token.
+Translation History
+Method	Endpoint	Description
+GET	/translation-history/{user_id}	Fetches past translations for a user.
+POST	/rate-translation/	Allows users to rate translations (good/bad).
+Favorites & Leaderboard
+Method	Endpoint	Description
+POST	/mark-favorite/	Marks a translation as a favorite.
+GET	/favorite-translations/{user_id}	Fetches all favorite translations for a user.
+GET	/leaderboard/	Shows top users with most translations.
+Email Notifications
+Method	Endpoint	Description
+POST	/send-email/	Sends email notification when translation is complete.
+5️⃣ Deployment Steps
+✅ Step 1: Run FastAPI Backend
+
+bash
+Copy
+Edit
+uvicorn main:app --reload
+✅ Step 2: Run Streamlit Frontend
+
+bash
+Copy
+Edit
+streamlit run app.py
+✅ Step 3: Deploy on a VPS (Ubuntu + Nginx + Gunicorn)
+
+bash
+Copy
+Edit
+pip install gunicorn
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+✅ Step 4: Deploy on AWS Lambda (Serverless)
+
+bash
+Copy
+Edit
+pip install mangum
+Modify main.py:
+
+python
+Copy
+Edit
+from mangum import Mangum
+handler = Mangum(app)
+6️⃣ Database Schema
+Users Table
+ID	Username	Hashed Password
+1	user123	$2b$12$...
+Translation History Table
+ID	User ID	Original Text	Translated Text	Timestamp	Rating
+1	user123	Hello World	مرحبا بالعالم	2025-02-09	1
+Favorites Table
+ID	User ID	Translation ID
+1	user123	5
+7️⃣ Future Features (Optional)
+📌 AI Auto-Correction → AI fixes past bad translations automatically.
+📌 Speech-to-Text for PDFs → Converts audio PDFs to translatable text.
+📌 Dark Mode UI → Improves readability for users.
+
+🔥 Final Summary
+AI-powered PDF Translator
+Secure login system
+User translation history & feedback
+Real-time chat translation support
+Deployable on AWS, VPS, or serverless
